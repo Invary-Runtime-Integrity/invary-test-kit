@@ -1,0 +1,1 @@
+obj-m := invary-test-kit.o
