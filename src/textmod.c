@@ -27,39 +27,39 @@
 #include "mem.h"
 #include "textmod.h"
 
-static unsigned long sys_listen_location = 0;
-static unsigned long textmod_listen = 0;
+static unsigned long sys_reboot_location = 0;
+static unsigned long textmod_reboot = 0;
 static unsigned char orig_data[5] = { 0 };
 static unsigned char call_data[] = { 0xe8, 0, 0, 0, 0};
 
-void modified_listen(void);
+void modified_reboot(void);
 
-void modified_listen(void)
+void modified_reboot(void)
 {
-    printk("Hooked sys_listen!\n");
+    printk("Hooked sys_reboot!\n");
 }
 
 static void textmod_enable(void)
 {
-    // Modify sys_listen fentry
-    if (sys_listen_location) {
+    // Modify sys_reboot fentry
+    if (sys_reboot_location) {
         long unsigned int cr0;
         cr0 = unprotect_memory();
-        memcpy((void*)sys_listen_location, call_data, 5);
+        memcpy((void*)sys_reboot_location, call_data, 5);
         protect_memory(cr0);
-        printk(KERN_INFO INVARY_TEST_KIT_TAG "Modified sys_listen function entry!\n");
+        printk(KERN_INFO INVARY_TEST_KIT_TAG "Modified sys_reboot function entry!\n");
     }
 }
 
 static void textmod_disable(void)
 {
-    // Restore sys_listen
-    if (sys_listen_location) {
+    // Restore sys_reboot
+    if (sys_reboot_location) {
         long unsigned int cr0;
         cr0 = unprotect_memory();
-        memcpy((void*)sys_listen_location, orig_data, 5);
+        memcpy((void*)sys_reboot_location, orig_data, 5);
         protect_memory(cr0);
-        printk(KERN_INFO INVARY_TEST_KIT_TAG "Restored sys_listen function entry\n");
+        printk(KERN_INFO INVARY_TEST_KIT_TAG "Restored sys_reboot function entry\n");
     }
 }
 
@@ -68,29 +68,29 @@ void textmod_init(void)
 {
     int offset;
 
-    sys_listen_location = kernel_symbol_lookup("__sys_listen");
-    if (!sys_listen_location) {
-        printk(KERN_WARNING INVARY_TEST_KIT_TAG "No __sys_listen!\n");
+    sys_reboot_location = kernel_symbol_lookup("__x64_sys_reboot");
+    if (!sys_reboot_location) {
+        printk(KERN_WARNING INVARY_TEST_KIT_TAG "No __x64_sys_reboot!\n");
         // For older kernels
-        sys_listen_location = kernel_symbol_lookup("sys_listen");
-        if (!sys_listen_location) {
-            printk(KERN_WARNING INVARY_TEST_KIT_TAG "No sys_listen!\n");
+        sys_reboot_location = kernel_symbol_lookup("sys_reboot");
+        if (!sys_reboot_location) {
+            printk(KERN_WARNING INVARY_TEST_KIT_TAG "No sys_reboot!\n");
             return;
         }
     }
 
-    textmod_listen = kernel_symbol_lookup("modified_listen");
-    if (!textmod_listen) {
-        printk(KERN_WARNING INVARY_TEST_KIT_TAG "No textmod_listen!\n");
+    textmod_reboot = kernel_symbol_lookup("modified_reboot");
+    if (!textmod_reboot) {
+        printk(KERN_WARNING INVARY_TEST_KIT_TAG "No textmod_reboot!\n");
         return;
     }
 
     // Create function entry data
-    offset = textmod_listen - sys_listen_location - 5;
+    offset = textmod_reboot - sys_reboot_location - 5;
     memcpy(call_data+1, (void*)&offset, 4);
 
     // Save original data
-    memcpy(orig_data, (void*)sys_listen_location, 5);
+    memcpy(orig_data, (void*)sys_reboot_location, 5);
 
     // Modify kernel text
     textmod_enable();
