@@ -17,8 +17,8 @@
  *
  ****************************************************************************/
 
-#ifndef _ROGUE_PUBLIC_HOOK_H
-#define _ROGUE_PUBLIC_HOOK_H
+#ifndef _INVARY_TEST_KIT_HOOK_H
+#define _INVARY_TEST_KIT_HOOK_H
 
 void hook_init(void);
 void hook_shutdown(void);

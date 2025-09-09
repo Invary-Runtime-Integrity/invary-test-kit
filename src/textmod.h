@@ -17,8 +17,8 @@
  *
  ****************************************************************************/
 
-#ifndef _ROGUE_TEXTMOD_H
-#define _ROGUE_TEXTMOD_H
+#ifndef _INVARY_TEST_KIT_TEXTMOD_H
+#define _INVARY_TEST_KIT_TEXTMOD_H
 
 void textmod_init(void);
 void textmod_shutdown(void);

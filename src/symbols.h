@@ -17,8 +17,8 @@
  *
  ****************************************************************************/
 
-#ifndef _ROGUE_PUBLIC_SYMBOLS_H
-#define _ROGUE_PUBLIC_SYMBOLS_H
+#ifndef _INVARY_TEST_KIT_SYMBOLS_H
+#define _INVARY_TEST_KIT_SYMBOLS_H
 
 void kernel_symbol_init(void);
 unsigned long kernel_symbol_lookup(const char* symbol);

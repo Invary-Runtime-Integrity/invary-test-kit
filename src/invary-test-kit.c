@@ -22,6 +22,7 @@
 #include "hook.h"
 #include "textmod.h"
 #include "mem.h"
+#include "kprobe.h"
 #include "invary-test-kit.h"
 
 MODULE_LICENSE("GPL");
@@ -33,6 +34,7 @@ MODULE_VERSION(VERSION_STR);
 #include "hook.c"
 #include "textmod.c"
 #include "mem.c"
+#include "kprobe.c"
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 asmlinkage long invary_kill(const struct pt_regs* pt_regs);
@@ -52,6 +54,7 @@ int invary_test_kit_init(void) {
     kernel_symbol_init();
     hook_init();
     textmod_init();
+    kprobe_init();
     kernel_kill = (kernel_kill_t)hook_syscall(invary_kill, __NR_kill);
     printk(KERN_ALERT INVARY_TEST_KIT_TAG "initialized\n");
     return 0;
@@ -59,6 +62,7 @@ int invary_test_kit_init(void) {
 
 void invary_test_kit_exit(void) {
     printk(KERN_ALERT INVARY_TEST_KIT_TAG "exiting\n");
+    kprobe_shutdown();
     textmod_shutdown();
     hook_shutdown();
     printk(KERN_ALERT INVARY_TEST_KIT_TAG "exited\n");
