@@ -33,8 +33,9 @@
 #if KPROBE_NEEDED
 static int sys_kill_kprobe_pre_handler(struct kprobe *p, struct pt_regs *regs)
 {
-    pid_t pid = (pid_t) regs->di;
-    int sig = (int) regs->si;
+    struct pt_regs *user_regs = (struct pt_regs *) regs->di;
+    pid_t pid = (pid_t) user_regs->di;
+    int sig = (int) user_regs->si;
     printk(KERN_DEBUG INVARY_TEST_KIT_TAG "forwarding kill to kernel implementation: pid=%d, sig=%x\n", pid, sig);
     return 0;
 }
