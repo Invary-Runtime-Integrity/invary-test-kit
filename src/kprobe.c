@@ -30,7 +30,7 @@
 #define KPROBE_NEEDED 1
 #endif
 
-#if KPROBE_NEEDED
+#ifdef KPROBE_NEEDED
 static int sys_kill_kprobe_pre_handler(struct kprobe *p, struct pt_regs *regs)
 {
     struct pt_regs *user_regs = (struct pt_regs *) regs->di;
