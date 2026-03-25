@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Invary Test Kit Module
- * Copyright (C) 2023 Invary, Inc.
+ * Copyright (C) 2025 Invary, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
  *
  ****************************************************************************/
 
-#ifndef _INVARY_TEST_KIT_MEM_H
-#define _INVARY_TEST_KIT_MEM_H
+#ifndef _INVARY_TEST_KIT_KPROBE_H
+#define _INVARY_TEST_KIT_KPROBE_H
 
-inline void protect_memory(long unsigned int cr0);
-inline long unsigned int unprotect_memory(void);
+void kprobe_init(void);
+void kprobe_shutdown(void);
 
 #endif
